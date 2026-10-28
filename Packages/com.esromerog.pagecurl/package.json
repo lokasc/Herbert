@@ -1,0 +1,14 @@
+{
+  "name": "com.esromerog.pagecurl",
+  "version": "1.0.0",
+  "displayName": "Page Curl",
+  "description": "Physical page-turn (page curl) for uGUI canvases, in the style of Apple Books and Kindle. Works with touch, mouse and Input System actions, on desktop and mobile.",
+  "unity": "6000.0",
+  "author": {
+    "name": "esromerog"
+  },
+  "dependencies": {
+    "com.unity.ugui": "2.0.0",
+    "com.unity.inputsystem": "1.7.0"
+  }
+}
