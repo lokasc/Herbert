@@ -1,2 +1,4 @@
 ﻿<Solution>
+  <Project Path="PageCurl.csproj" />
+  <Project Path="PageCurl.Editor.csproj" />
 </Solution>

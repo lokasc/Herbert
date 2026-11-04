@@ -1,5 +1,21 @@
 {
   "dependencies": {
+    "com.esromerog.pagecurl": {
+      "version": "file:com.esromerog.pagecurl",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.ugui": "2.0.0",
+        "com.unity.inputsystem": "1.7.0"
+      }
+    },
+    "com.inkle.ink-unity-integration": {
+      "version": "https://github.com/inkle/ink-unity-integration.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "73cc147969899710843f473fdb06cea0e4d50fed"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.14",
       "depth": 0,

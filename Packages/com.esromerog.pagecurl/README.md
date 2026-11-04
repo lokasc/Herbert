@@ -70,7 +70,9 @@ Requirements: the canvas needs a `GraphicRaycaster`, and the scene needs an `Eve
 - **Capture Layer**: layer for the hidden capture camera (UI by default).
 
 `PageCurlInput` options:
-- Drag on/off, **Axis Bias** (how dominant the turn direction must be), and **Drag Zone** (where drags may start).
+- Drag on/off, **Drag Slop** (how far, in points, a press travels before it's a drag rather than a tap; scaled
+  by screen DPI), **Axis Bias** (how dominant the turn direction must be), and **Drag Zone** (where drags may
+  start).
 - Tap on/off and **Tap Zone**.
 - **Next/Previous Page Action**: either embedded actions with editable bindings, or references to actions in your
   `.inputactions` asset.
@@ -139,3 +141,6 @@ mirrored, and the curl changes continuously.
   deactivated.
 - With **Recapture Every Turn** on (the default), each turn renders up to four captures. That's cheap for typical
   pages. Turn it off for heavy pages and use `MarkDirty`.
+- Testing touch in the Editor with Unity Remote: set **Project Settings ▸ Editor ▸ Unity Remote ▸ Device** to
+  your device, connect over USB *before* entering Play Mode, and keep the Game view focused. If
+  **Window ▸ Analysis ▸ Input Debugger** doesn't list a Touchscreen, the touches aren't reaching Unity.

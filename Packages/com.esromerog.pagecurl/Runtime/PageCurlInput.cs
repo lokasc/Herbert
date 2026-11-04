@@ -14,10 +14,13 @@ namespace PageCurl
     /// </summary>
     [RequireComponent(typeof(PageCurlBook))]
     [AddComponentMenu("UI/Page Curl/Page Curl Input")]
-    public class PageCurlInput : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+    public class PageCurlInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("Drag")]
         [SerializeField] bool dragToTurn = true;
+        [Tooltip("Distance in points (1/160 inch) a press must travel before it counts as a drag instead of a tap. " +
+                 "Scaled by screen DPI so taps survive finger jitter on high-density phones.")]
+        [SerializeField, Min(0f)] float dragSlop = 10f;
         [Tooltip("A drag must move this many times further along the turn axis than across it to start a turn.")]
         [SerializeField, Range(0f, 4f)] float axisBias = 1f;
         [Tooltip("Fraction of the page, measured from the edge a turn starts at, where drags may begin. 1 allows anywhere.")]
@@ -38,6 +41,8 @@ namespace PageCurl
 
         PageCurlBook _book;
         RectTransform _rect;
+        bool _pressed;
+        bool _decided;
         bool _dragging;
         int _pointerId;
         Vector2 _lastPoint;
@@ -63,6 +68,7 @@ namespace PageCurl
         {
             Unsubscribe(nextPageAction, OnNextPage);
             Unsubscribe(previousPageAction, OnPreviousPage);
+            _pressed = false;
             if (_dragging)
             {
                 _dragging = false;
@@ -70,40 +76,36 @@ namespace PageCurl
             }
         }
 
+        public void OnPointerDown(PointerEventData eventData) => Track(eventData);
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (!_pressed || eventData.pointerId != _pointerId)
+                return;
+            _pressed = false;
+            // Anything that never left the slop is a tap, even if the EventSystem's smaller drag threshold
+            // already started a drag (which would have suppressed its click event).
+            if (!_decided && !_dragging)
+                Tap(eventData);
+        }
+
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (!dragToTurn || _dragging || eventData.button != PointerEventData.InputButton.Left)
-                return;
-            if (!TryGetLocal(eventData.pressPosition, eventData.pressEventCamera, out var press) ||
-                !TryGetLocal(eventData.position, eventData.pressEventCamera, out var current))
-                return;
-
-            var frame = _book.Frame;
-            var delta = frame.DirectionFromBook(current - press);
-            if (Mathf.Abs(delta.x) <= Mathf.Abs(delta.y) * axisBias)
-                return;
-
-            // Pulling towards the spine turns forward; pushing away from it brings the previous page back.
-            int direction = delta.x < 0f ? 1 : -1;
-            if (!InDragZone(frame.FromBook(press), direction))
-                return;
-
-            // Start from the press point so the movement before the drag threshold isn't lost.
-            if (!_book.BeginDrag(press, direction))
-                return;
-
-            _dragging = true;
-            _pointerId = eventData.pointerId;
-            _velocity = Vector2.zero;
-            _lastPoint = current;
-            _lastTime = Time.unscaledTime;
-            _book.Drag(current);
+            // A child that handles its own presses (a Button, say) swallows the pointer-down, but drags still
+            // bubble up here, so a drag also starts tracking.
+            Track(eventData);
+            TryBeginTurn(eventData);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!_dragging || eventData.pointerId != _pointerId)
+            if (eventData.pointerId != _pointerId)
                 return;
+            if (!_dragging)
+            {
+                TryBeginTurn(eventData);
+                return;
+            }
             if (!TryGetLocal(eventData.position, eventData.pressEventCamera, out var current))
                 return;
 
@@ -128,9 +130,56 @@ namespace PageCurl
             _book.EndDrag(_velocity);
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        // A newer press takes over one that hasn't started a turn, so a lost pointer-up can't lock input out.
+        void Track(PointerEventData eventData)
         {
-            if (!tapToTurn || eventData.dragging || _book.IsTurning || eventData.button != PointerEventData.InputButton.Left)
+            if (_dragging || eventData.button != PointerEventData.InputButton.Left)
+                return;
+            _pressed = true;
+            _decided = false;
+            _pointerId = eventData.pointerId;
+        }
+
+        // Decides once the press has travelled past the slop, so the direction comes from a meaningful stretch of
+        // movement rather than the first few pixels of finger jitter.
+        void TryBeginTurn(PointerEventData eventData)
+        {
+            if (!_pressed || _decided || eventData.pointerId != _pointerId)
+                return;
+            if ((eventData.position - eventData.pressPosition).sqrMagnitude < SlopPixels * SlopPixels)
+                return;
+            _decided = true;
+
+            if (!dragToTurn)
+                return;
+            if (!TryGetLocal(eventData.pressPosition, eventData.pressEventCamera, out var press) ||
+                !TryGetLocal(eventData.position, eventData.pressEventCamera, out var current))
+                return;
+
+            var frame = _book.Frame;
+            var delta = frame.DirectionFromBook(current - press);
+            if (Mathf.Abs(delta.x) <= Mathf.Abs(delta.y) * axisBias)
+                return;
+
+            // Pulling towards the spine turns forward; pushing away from it brings the previous page back.
+            int direction = delta.x < 0f ? 1 : -1;
+            if (!InDragZone(frame.FromBook(press), direction))
+                return;
+
+            // Start from the press point so the movement inside the slop isn't lost.
+            if (!_book.BeginDrag(press, direction))
+                return;
+
+            _dragging = true;
+            _velocity = Vector2.zero;
+            _lastPoint = current;
+            _lastTime = Time.unscaledTime;
+            _book.Drag(current);
+        }
+
+        void Tap(PointerEventData eventData)
+        {
+            if (!tapToTurn || _book.IsTurning)
                 return;
             if (!TryGetLocal(eventData.position, eventData.pressEventCamera, out var local))
                 return;
@@ -147,6 +196,8 @@ namespace PageCurl
             else if (backZone)
                 _book.PreviousPage();
         }
+
+        float SlopPixels => dragSlop * (Screen.dpi > 0f ? Screen.dpi : 160f) / 160f;
 
         bool InDragZone(Vector2 press, int direction)
         {
