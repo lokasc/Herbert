@@ -7,23 +7,39 @@ using UnityEngine.UI;
 
 public class InkIntegration : MonoBehaviour
 {
+    [SerializeField] private InkFile inkAsset;
     [SerializeField] private LayoutGroup layoutParent;
 
     [SerializeField] private Button herbertDialogueButton;
     [SerializeField] private Button choiceButton;
 
-    [SerializeField] private InkFile inkAsset;
+    [SerializeField] private Button nurseTextButton;
+
+    [SerializeField] private TextMeshProUGUI nurseDialogueText;
+
+    // I think we should have a level or game manager in the future and that's where we store this
+    // For now I'm keeping it here
+    // Just in case lucas, me or our dear Claude looks at this
+    private int empathyScore = 0;
     private Story _inkStory;
     private TextMeshProUGUI herbertDialogueText;
+    
     private List<Button> currentChoices = new();
 
     public VariablesState InkVariables => _inkStory.variablesState;
-    
+
     void Awake()
     {
         _inkStory = new Story(inkAsset.storyJson);
         herbertDialogueText = herbertDialogueButton.GetComponentInChildren<TextMeshProUGUI>();
         herbertDialogueButton.onClick.AddListener(()=>AdvanceStoryLine());
+        nurseTextButton.onClick.AddListener(()=>AdvanceStoryLine());
+    }
+
+    void OnDisable()
+    {  
+        herbertDialogueButton.onClick.RemoveAllListeners();
+        nurseTextButton.onClick.RemoveAllListeners();
     }
 
     void Start()
@@ -33,12 +49,24 @@ public class InkIntegration : MonoBehaviour
 
     public void AdvanceStoryLine()
     {
-
+        
         ClearChoiceObjects();
+        HideNurse();
 
         if (_inkStory.canContinue)
         {
             string storyText = _inkStory.Continue();
+            List<string> currentTags = _inkStory.currentTags;
+
+            CheckForEmpathyTags(currentTags, out bool skipLine);
+            if (skipLine) return;
+
+            if (currentTags.Contains("nursenotification"))
+            {
+                DisplayNurse(storyText);
+                return;
+            }
+
             DisplayStoryText(storyText);
             return;
         }
@@ -52,7 +80,8 @@ public class InkIntegration : MonoBehaviour
             }
             return;
 
-        } else
+        }
+        else
         {
             // Story has ended
             Debug.Log("Ink has ended");
@@ -61,12 +90,57 @@ public class InkIntegration : MonoBehaviour
 
     }
 
+    void DisplayNurse(string storyText)
+    {
+        nurseTextButton.gameObject.SetActive(true);
+        nurseDialogueText.text = storyText;
+        herbertDialogueButton.interactable = false;
+        foreach (Button choiceButton in currentChoices)
+        {
+            choiceButton.interactable = false;
+        }
+    }
+
+    void HideNurse()
+    {
+        nurseTextButton.gameObject.SetActive(false);
+        herbertDialogueButton.interactable = true;
+        foreach (Button choiceButton in currentChoices)
+        {
+            choiceButton.interactable = true;
+        }
+    }
+
+    void CheckForEmpathyTags(List<string> currentTags, out bool skipLine)
+    {
+        skipLine = false;
+        string empathyTag = currentTags.Find((myTag) => myTag.Contains("empathy"));
+        if (empathyTag != null)
+        {
+            if (empathyTag == "empathyscore")
+            {
+                AdvanceStoryLine();
+                skipLine = true;
+                return;
+            }
+            string pathString = _inkStory.state.currentPathString;
+            Debug.Log(pathString);
+            int pathVisits = _inkStory.state.VisitCountAtPathString(pathString);
+            Debug.Log("Path visits: " + pathVisits);
+
+            int delta = int.Parse(empathyTag.Substring(7));
+
+            empathyScore += delta;
+            Debug.Log("Empathy changed: " + empathyScore);
+        }
+    }
+
     void CreateChoiceObject(Choice choice)
     {
         GameObject co = Instantiate(choiceButton.gameObject, layoutParent.transform);
 
         Button coButton = co.GetComponent<Button>();
-        coButton.onClick.AddListener(()=> MakeChoice(choice));
+        coButton.onClick.AddListener(() => MakeChoice(choice));
 
         co.GetComponentInChildren<TextMeshProUGUI>().text = choice.text;
 
@@ -86,6 +160,7 @@ public class InkIntegration : MonoBehaviour
 
     void ClearChoiceObjects()
     {
+        
         foreach (Button button in currentChoices)
         {
             button.onClick.RemoveAllListeners();
@@ -93,6 +168,6 @@ public class InkIntegration : MonoBehaviour
         }
         currentChoices.Clear();
     }
-    
+
 
 }
