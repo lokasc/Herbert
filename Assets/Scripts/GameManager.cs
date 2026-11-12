@@ -3,6 +3,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+[Serializable]
+public class GameScore
+{
+    public int empathy = 0;
+}
+
 public class GameManager : MonoBehaviour
 {
     public enum GamePhase
@@ -11,6 +17,18 @@ public class GameManager : MonoBehaviour
         PhysicalExamination,
         McqDebrief,
         ScoringScreen
+    }
+
+    public int Empathy
+    {
+        get
+        {
+            return gameScore.empathy;
+        }
+        set
+        {
+            gameScore.empathy = value;
+        }
     }
 
     [SerializeField] private Button physicalExaminationButton;
@@ -22,6 +40,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float zoomSensitivity = 0.001f;
     [SerializeField] private float minimumFieldOfView = 10f;
     [SerializeField] private float minimumOrthographicSize = 0.5f;
+
+    private GameScore gameScore;
 
     private GameState currentState;
     private Vector3 cameraOrigin;

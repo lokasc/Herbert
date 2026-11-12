@@ -58,7 +58,7 @@ Nurse: Ask open-ended questions instead of leading questions #nursenotification
 
 === Breathing_Question ===
 + [Ask about day-to-day] -> Breathing_Question_Response_1
-    ~ give_empathy(1, Breathing_Question == 1)
+ng_Question == 1)
 + [“Is that it?”] -> Breathing_Question_Response_2
 + [Ask about struggles]
     ~ give_empathy(-1, Breathing_Question == 1)

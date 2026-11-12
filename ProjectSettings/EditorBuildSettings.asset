@@ -6,10 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Main.unity
-    guid: e96008ef4c0b646448efbcbb6d3cf011
+    path: Assets/Scenes/HebertVisualNovel.unity
+    guid: 7aef16eaa6a52461ea6696eaa983abd7
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 0
+    path: Assets/Scenes/Main.unity
+    guid: e96008ef4c0b646448efbcbb6d3cf011
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

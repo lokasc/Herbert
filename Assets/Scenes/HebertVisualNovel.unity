@@ -1522,7 +1522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e45fac391efb3470fac4fba1dfcb155f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InkIntegration
-  inkAsset: {fileID: 6231892579173505729, guid: 266269bbe81354948aab9c479c9cfc30, type: 3}
+  inkAsset: {fileID: 6231892579173505729, guid: 2e0ff8b03fe9f4e83a0d7416129e6505, type: 3}
   layoutParent: {fileID: 1036777471}
   herbertDialogueButton: {fileID: 1452937836}
   choiceButton: {fileID: 8999528834897411842, guid: 86060f797a3a34a97bc6f129c74891b3, type: 3}

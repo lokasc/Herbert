@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class InkIntegration : MonoBehaviour
 {
+    // This keeps track of scores and all of that
+    // I don't know if this is ideal but whateveeer
+    [SerializeField] private GameManager gm;
     [SerializeField] private InkFile inkAsset;
     [SerializeField] private LayoutGroup layoutParent;
 
@@ -16,11 +19,6 @@ public class InkIntegration : MonoBehaviour
     [SerializeField] private Button nurseTextButton;
 
     [SerializeField] private TextMeshProUGUI nurseDialogueText;
-
-    // I think we should have a level or game manager in the future and that's where we store this
-    // For now I'm keeping it here
-    // Just in case lucas, me or our dear Claude looks at this
-    private int empathyScore = 0;
     private Story _inkStory;
     private TextMeshProUGUI herbertDialogueText;
     
@@ -130,7 +128,8 @@ public class InkIntegration : MonoBehaviour
 
             int delta = int.Parse(empathyTag.Substring(7));
 
-            empathyScore += delta;
+            gm.Empathy += delta;
+            
             Debug.Log("Empathy changed: " + empathyScore);
         }
     }
