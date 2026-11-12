@@ -92,7 +92,6 @@ CONST QUESTIONS_NEEDED = 5
 
 === Nurse_Feedback(line) ===
 Nurse: {line} #nursenotification //this should help with triggering or catching when the nursenotification is played
-
 + [Continue] -> Scene1_Player_Decision
 
 === Patient_Introduction ===

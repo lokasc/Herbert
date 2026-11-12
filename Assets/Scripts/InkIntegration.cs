@@ -51,13 +51,15 @@ public class InkIntegration : MonoBehaviour
         ClearChoiceObjects();
         HideNurse();
 
+        // Add some script that checks if I'm jumping directly into a choice
+        // Just to debug the "empty text box" of herbert when a knot starts with a choice
+
         if (_inkStory.canContinue)
         {
             string storyText = _inkStory.Continue();
             List<string> currentTags = _inkStory.currentTags;
 
-            CheckForEmpathyTags(currentTags, out bool skipLine);
-            if (skipLine) return;
+            if (CheckForEmpathyTags(currentTags)) return;
 
             if (currentTags.Contains("nursenotification"))
             {
@@ -109,17 +111,15 @@ public class InkIntegration : MonoBehaviour
         }
     }
 
-    void CheckForEmpathyTags(List<string> currentTags, out bool skipLine)
+    bool CheckForEmpathyTags(List<string> currentTags)
     {
-        skipLine = false;
         string empathyTag = currentTags.Find((myTag) => myTag.Contains("empathy"));
         if (empathyTag != null)
         {
             if (empathyTag == "empathyscore")
             {
                 AdvanceStoryLine();
-                skipLine = true;
-                return;
+                return true;
             }
             string pathString = _inkStory.state.currentPathString;
             Debug.Log(pathString);
@@ -129,9 +129,8 @@ public class InkIntegration : MonoBehaviour
             int delta = int.Parse(empathyTag.Substring(7));
 
             gm.Empathy += delta;
-            
-            Debug.Log("Empathy changed: " + empathyScore);
         }
+        return false;
     }
 
     void CreateChoiceObject(Choice choice)

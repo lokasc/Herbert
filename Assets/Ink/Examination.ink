@@ -4,6 +4,7 @@ VAR wife_asked = false
 VAR showering = false
 VAR main_complaint = false
 
+
 -> MainQuestions_Introduction
 
 === MainQuestions_Introduction ===
@@ -15,7 +16,6 @@ VAR main_complaint = false
 
 === Nurse_Feedback(line) ===
 Nurse: {line} #nursenotification
-
 + [Continue] -> MainQuestions_Introduction
 
 === function give_empathy(amount, count_it) ===
@@ -58,7 +58,7 @@ Nurse: Ask open-ended questions instead of leading questions #nursenotification
 
 === Breathing_Question ===
 + [Ask about day-to-day] -> Breathing_Question_Response_1
-ng_Question == 1)
+    ~ give_empathy(1, Breathing_Question == 1)
 + [“Is that it?”] -> Breathing_Question_Response_2
 + [Ask about struggles]
     ~ give_empathy(-1, Breathing_Question == 1)

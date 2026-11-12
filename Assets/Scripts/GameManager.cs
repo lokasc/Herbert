@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class GameScore
 {
     public int empathy = 0;
+    public float gameTime = 0;
 }
 
 public class GameManager : MonoBehaviour
@@ -55,6 +56,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        gameScore.gameTime = 0;
+        gameScore.empathy = 0;
+        
         if (freeCamera == null)
         {
             freeCamera = Camera.main;
@@ -104,6 +108,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        gameScore.gameTime += Time.deltaTime;
         if (!freeCameraActive || freeCamera == null)
         {
             return;
