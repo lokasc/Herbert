@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float minimumFieldOfView = 10f;
     [SerializeField] private float minimumOrthographicSize = 0.5f;
 
+    [SerializeField] private Vector2 extraCamOffset;
+
     private GameScore gameScore;
 
     private GameState currentState;
@@ -56,9 +58,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        gameScore.gameTime = 0;
-        gameScore.empathy = 0;
-        
+        gameScore = new GameScore();
+
         if (freeCamera == null)
         {
             freeCamera = Camera.main;
@@ -125,8 +126,8 @@ public class GameManager : MonoBehaviour
         ReadTouchPan(ref offset);
 
         Vector2 maximumOffset = GetMaximumPanOffset();
-        offset.x = Mathf.Clamp(offset.x, -maximumOffset.x, maximumOffset.x);
-        offset.y = Mathf.Clamp(offset.y, -maximumOffset.y, maximumOffset.y);
+        offset.x = Mathf.Clamp(offset.x, -maximumOffset.x - extraCamOffset.x, maximumOffset.x + extraCamOffset.x);
+        offset.y = Mathf.Clamp(offset.y, -maximumOffset.y - extraCamOffset.y, maximumOffset.y + extraCamOffset.y);
         freeCamera.transform.position = cameraOrigin + right * offset.x + up * offset.y;
     }
 
