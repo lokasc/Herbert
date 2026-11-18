@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float minimumFieldOfView = 10f;
     [SerializeField] private float minimumOrthographicSize = 0.5f;
 
-    private GameScore gameScore;
+    private GameScore gameScore = new();
 
     private GameState currentState;
     private Vector3 cameraOrigin;

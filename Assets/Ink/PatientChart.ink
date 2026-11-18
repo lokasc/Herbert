@@ -108,8 +108,8 @@ What would you like to do?
 Current empathy: {empathy} #empathyscore
 
 
-+ [Look at Chart] -> Look_at_Chart
-+ [Ask Patient Questions (Scene1)] -> Ask_Patient_Questions
++ [Look at chart] -> Look_at_Chart
++ [Ask about the chart] -> Ask_Patient_Questions
 + { can_proceed() } [Proceed to Physical Exam (Scene2)] -> Patient_Physical
 
 

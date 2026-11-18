@@ -53,6 +53,13 @@ public class InkIntegration : MonoBehaviour
 
         // Add some script that checks if I'm jumping directly into a choice
         // Just to debug the "empty text box" of herbert when a knot starts with a choice
+        // Wire up the switching from dialogue to interview
+        // For chart scene, there are two knots that I have to connect to
+        // Look_at_Chart
+        // Ask_Patient_Questions
+        // Remove return to chart
+        // Make sure the variables in the patient chart interact
+
 
         if (_inkStory.canContinue)
         {

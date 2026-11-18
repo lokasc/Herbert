@@ -209,9 +209,9 @@ Transform:
   m_GameObject: {fileID: 434090070}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.34, y: 2.29, z: 0}
-  m_LocalScale: {x: 0.93726134, y: 0.93726134, z: 0.93726134}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.62, z: 0}
+  m_LocalScale: {x: 0.52, y: 0.52, z: 0.52}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -264,7 +264,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 3de776a5f19aa5842a90ca7c1a7d71c8, type: 3}
+  m_Sprite: {fileID: -5124887049492740441, guid: ec7db76089fab4297927d6b8c7a2f8ce, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -402,7 +402,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 369.99997, y: 25}
+  m_SizeDelta: {x: 369.99997, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &582057004
 MonoBehaviour:
@@ -451,8 +451,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1522,7 +1522,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e45fac391efb3470fac4fba1dfcb155f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InkIntegration
-  inkAsset: {fileID: 6231892579173505729, guid: 2e0ff8b03fe9f4e83a0d7416129e6505, type: 3}
+  gm: {fileID: 1702930876}
+  inkAsset: {fileID: 6231892579173505729, guid: 266269bbe81354948aab9c479c9cfc30, type: 3}
   layoutParent: {fileID: 1036777471}
   herbertDialogueButton: {fileID: 1452937836}
   choiceButton: {fileID: 8999528834897411842, guid: 86060f797a3a34a97bc6f129c74891b3, type: 3}
@@ -1578,7 +1579,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 369.99997, y: 20}
+  m_SizeDelta: {x: 369.99997, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1736847404
 MonoBehaviour:
@@ -1935,7 +1936,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -5}
-  m_SizeDelta: {x: -20, y: 50}
+  m_SizeDelta: {x: -20, y: 63.2}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2111275241
 MonoBehaviour:
