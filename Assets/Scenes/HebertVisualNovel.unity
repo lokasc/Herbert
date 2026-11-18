@@ -797,6 +797,98 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &845463916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 845463917}
+  - component: {fileID: 845463919}
+  - component: {fileID: 845463918}
+  m_Layer: 0
+  m_Name: Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &845463917
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845463916}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 991490298}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &845463918
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845463916}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.08564526, y: 0.12765479}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1.3473765, y: 1.297523}
+  m_EdgeRadius: 0
+--- !u!114 &845463919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845463916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa70ad2ef67235f43b5b3ab13307d202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SymptomHitbox
+  symptom: {fileID: 11400000, guid: fe2e12aa2aef5b24c859fb70aa18ddf4, type: 2}
 --- !u!1001 &884375200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -855,7 +947,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1814160344827840843, guid: e4d87187b1ae9ec45bd9b483a16894c7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 845463917}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4d87187b1ae9ec45bd9b483a16894c7, type: 3}
 --- !u!1 &974079004
@@ -987,6 +1082,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &991490298 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1814160344827840843, guid: e4d87187b1ae9ec45bd9b483a16894c7, type: 3}
+  m_PrefabInstance: {fileID: 884375200}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1036777469
 GameObject:
   m_ObjectHideFlags: 0
@@ -1496,6 +1596,7 @@ GameObject:
   - component: {fileID: 1702930877}
   - component: {fileID: 1702930876}
   - component: {fileID: 1702930878}
+  - component: {fileID: 1702930879}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1522,7 +1623,7 @@ MonoBehaviour:
   cameraMoveSpeed: 5
   swipeSensitivity: 0.01
   zoomSensitivity: 0.1
-  minimumFieldOfView: 30
+  minimumFieldOfView: 10
   minimumOrthographicSize: 0.5
   extraCamOffset: {x: 1, y: 5}
 --- !u!4 &1702930877
@@ -1552,6 +1653,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 472120d6a2290234691d45b8a9720115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResetGame
+--- !u!114 &1702930879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702930875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b889705bb0193ef4c9dfd895cd576432, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SymptomHitboxDetector
+  targetCamera: {fileID: 0}
+  maxRayDistance: 100
 --- !u!1 &1706485186
 GameObject:
   m_ObjectHideFlags: 0
