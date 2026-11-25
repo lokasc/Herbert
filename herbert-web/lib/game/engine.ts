@@ -1,4 +1,5 @@
 import { Story } from "inkjs";
+import { CHART_ROW_KNOT } from "./content";
 import type {
   Choice,
   InkValue,
@@ -18,7 +19,25 @@ import type {
  *   #angry / #happy     Herbert's emotion
  *   #repeat_question    Herbert is annoyed the same topic was asked again
  */
-const SPEAKER_RE = /^(Player|Herbert|Nurse):\s*/;
+const SPEAKER_RE = /^(Player|Herbert|Nurse):\s*/i;
+/** Debug line ("Current empathy: N"); older ink tagged it #empathyscore, newer ink sometimes doesn't. */
+const EMPATHY_DEBUG_RE = /^Current empathy:/i;
+/** Spoken lines are wrapped in straight or curly quotes in the ink; strip them for display. */
+const WRAPPING_QUOTES_RE = /^["\u201C]([\s\S]*)["\u201D]$/;
+
+/**
+ * Which screen the current choices belong to. The ink used to announce this
+ * through EXTERNAL switchState(); the Unity version of the ink doesn't, so we
+ * infer it from the choices on offer. (switchState is still honoured if present.)
+ */
+function inferMode(choices: Choice[], phase: Phase): Mode | null {
+  const texts = choices.map((c) => c.text.trim());
+  if (phase === "exam") return texts.includes("END EXAM") ? "explore" : null;
+  if (texts.some((t) => t in CHART_ROW_KNOT) || texts.some((t) => /^return to chart/i.test(t)))
+    return "chart";
+  if (texts.includes("Look at Chart")) return "base";
+  return null;
+}
 
 /** One compiled ink story plus the "run until the next choice" loop. */
 class StoryRunner {
@@ -47,7 +66,7 @@ class StoryRunner {
       const tags = this.story.currentTags ?? [];
       const text = raw.trim();
       if (!text) continue;
-      if (tags.includes("empathyscore")) continue;
+      if (tags.includes("empathyscore") || EMPATHY_DEBUG_RE.test(text)) continue;
       if (tags.includes("system_message")) {
         system.push(text);
         continue;
@@ -113,6 +132,7 @@ function parseLine(text: string, tags: string[], id: number): Line {
     body = text.slice(m[0].length);
   }
   if (tags.includes("nursenotification")) speaker = "nurse";
+  if (speaker !== "narrator") body = body.replace(WRAPPING_QUOTES_RE, "$1");
   return {
     id,
     speaker,
@@ -147,6 +167,7 @@ const TRACKED_KNOTS = [
   "JVD_Question",
   "Clubbing_Question",
   "BibasilarCrackles_Question",
+  "Feet_Question",
 ];
 
 /** localStorage key + format version for the saved game. Bump SAVE_VERSION when the shape below changes. */
@@ -370,7 +391,10 @@ export class GameEngine {
     const runner = this.active;
     this.pendingMode = null;
     const beat = runner.pump(this.nextLineId);
-    if (this.pendingMode) this.mode = this.pendingMode;
+    const inferred = inferMode(beat.choices, this.phase);
+    // Every beat re-decides the screen: an explicit switchState wins, else infer
+    // from the choices, else fall back to the plain dialogue card.
+    this.mode = this.pendingMode ?? inferred ?? "interview";
     this.beatCounter++;
 
     if (beat.nurse) {

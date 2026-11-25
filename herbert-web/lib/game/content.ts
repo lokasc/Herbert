@@ -39,8 +39,16 @@ export const HOTSPOTS: Hotspot[] = [
   { id: "abdomen", knot: "Abdomen_Question", label: "Abdomen", x: 44, y: 49, w: 10, h: 3.8 },
   { id: "plaques", knot: "ScalyPlaques_Question", label: "Arm", x: 15, y: 49, w: 6, h: 4.2 },
   { id: "clubbing", knot: "Clubbing_Question", label: "Hand", x: 58, y: 62, w: 6, h: 2.8 },
+  // Second lung: same knot as "crackles" (bibasilar = both lung bases).
+  { id: "crackles-r", knot: "BibasilarCrackles_Question", label: "Lungs", x: 61, y: 42.5, w: 7, h: 3.4 },
+  { id: "legs", knot: "Feet_Question", label: "Legs", x: 51, y: 85, w: 8, h: 4.5 },
 ];
 
+/** One entry per finding: several hotspots can open the same knot but count once. */
+export const EXAM_FINDINGS: Hotspot[] = HOTSPOTS.filter(
+  (h, i) => HOTSPOTS.findIndex((o) => o.knot === h.knot) === i,
+);
+
 export function nurseMood(text: string): "happy" | "upset" {
-  return /^good job/i.test(text.trim()) ? "happy" : "upset";
+  return /^(good|great) job/i.test(text.trim()) ? "happy" : "upset";
 }

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useGame } from "./GameContext";
 import { Marker } from "./Marker";
-import { HOTSPOTS, nurseMood } from "@/lib/game/content";
+import { EXAM_FINDINGS, nurseMood } from "@/lib/game/content";
 
 /** Nurse feedback: portrait + speech card; tap to dismiss. */
 export function NurseCard() {
@@ -199,7 +199,7 @@ export function ExamHud({
   onReset: () => void;
 }) {
   const { engine, snap } = useGame();
-  const found = HOTSPOTS.filter((h) => snap.visited[h.knot]).length;
+  const found = EXAM_FINDINGS.filter((h) => snap.visited[h.knot]).length;
   return (
     <>
       <button type="button" className="tag tag--end" onClick={() => engine.endExam()}>
@@ -215,7 +215,7 @@ export function ExamHud({
         </p>
         <div className="examhud__row">
           <span className="examhud__count">
-            {found} / {HOTSPOTS.length} examined
+            {found} / {EXAM_FINDINGS.length} examined
           </span>
           <span className="examhud__zoom" role="group" aria-label="Zoom">
             <SketchButton w={11} seed={3} onClick={() => onZoom(0.8)} label="Zoom out">
@@ -247,7 +247,7 @@ export function Debrief() {
       <div className="card__scroll">
         <h2 className="debrief__title">Examination complete</h2>
         <ul className="debrief__list">
-          {HOTSPOTS.map((h) => (
+          {EXAM_FINDINGS.map((h) => (
             <li key={h.id} className={snap.visited[h.knot] ? "is-done" : ""}>
               <span aria-hidden>{snap.visited[h.knot] ? "✓" : "○"}</span> {h.label}
               {!snap.visited[h.knot] && <em> — not examined</em>}
