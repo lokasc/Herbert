@@ -30,6 +30,37 @@ export function NurseCard() {
   );
 }
 
+/**
+ * "Are you sure?" before the one-way trip to the physical exam, asked by the
+ * nurse (same portrait + bubble as her feedback) with highlightable answers.
+ */
+export function NurseConfirm() {
+  const { engine, snap } = useGame();
+  if (!snap.confirmPhysical) return null;
+  return (
+    <div className="nurse nurse--confirm" role="alertdialog" aria-label="Go to the physical examination?">
+      <span className="nurse__portrait">
+        <img src="/assets/nurse/default.webp" alt="" draggable={false} />
+      </span>
+      <span className="nurse__bubble">
+        <span className="nurse__who">Nurse</span>
+        <span className="nurse__text">
+          Going to the physical examination will end the patient interview and you won&rsquo;t be able
+          to go back. Are you sure?
+        </span>
+        <ul className="choices choices--confirm">
+          <li className="choices__item choices__item--option">
+            <Marker onClick={() => engine.confirmPhysical()}>Yes, start the physical exam</Marker>
+          </li>
+          <li className="choices__item choices__item--back">
+            <Marker onClick={() => engine.cancelPhysical()}>Not yet</Marker>
+          </li>
+        </ul>
+      </span>
+    </div>
+  );
+}
+
 function ToastItem({ id, text }: { id: number; text: string }) {
   const { engine } = useGame();
   useEffect(() => {
@@ -61,7 +92,7 @@ export function BottomBar() {
   const { engine } = useGame();
   return (
     <>
-      <button type="button" className="tag tag--physical" onClick={() => engine.startPhysical()}>
+      <button type="button" className="tag tag--physical" onClick={() => engine.requestPhysical()}>
         <img src="/assets/ui/tag.webp" alt="" draggable={false} />
         <span>Physical exam ›</span>
       </button>
@@ -94,24 +125,20 @@ export function ExamHud({
   const found = HOTSPOTS.filter((h) => snap.visited[h.knot]).length;
   return (
     <>
-      <button type="button" className="tag tag--physical" onClick={() => engine.leaveExam()}>
-        <img src="/assets/ui/tag.webp" alt="" draggable={false} />
-        <span>‹ Bedside</span>
-      </button>
       <button type="button" className="tag tag--end" onClick={() => engine.endExam()}>
         <img src="/assets/ui/tag.webp" alt="" draggable={false} />
         <span>End exam</span>
       </button>
       <div className="examhud">
         <p className="examhud__hint">
-          Look Herbert over — tap what you notice.
-          <small>Scroll or pinch to zoom · drag to pan · WASD to move</small>
+          Look Herbert over and tap what you notice.
+          <small>Scroll or pinch to zoom, and drag or use WASD to pan</small>
         </p>
         <div className="examhud__row">
           <span className="examhud__count">
             {found} / {HOTSPOTS.length} examined
           </span>
-          <span className="examhud__zoom">
+          <span className="examhud__zoom" role="group" aria-label="Zoom">
             <button type="button" onClick={() => onZoom(0.8)} aria-label="Zoom out">−</button>
             <button type="button" onClick={onReset} aria-label="Reset zoom">{Math.round(zoom * 100)}%</button>
             <button type="button" onClick={() => onZoom(1.25)} aria-label="Zoom in">+</button>
@@ -142,9 +169,6 @@ export function Debrief() {
         </p>
         <ul className="choices">
           <li className="choices__item choices__item--option">
-            <Marker onClick={() => engine.leaveExam()}>Back to the bedside</Marker>
-          </li>
-          <li className="choices__item choices__item--back">
             <Marker onClick={() => engine.reset()}>Start over</Marker>
           </li>
         </ul>

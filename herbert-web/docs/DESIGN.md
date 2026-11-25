@@ -14,8 +14,8 @@ reference. Nothing here is committed yet.
 | Screen | Unity equivalent | Web |
 |---|---|---|
 | **Intro** | `Patient_Introduction` (never shown in Unity — the scene starts in "base") | Plays first, in the interview folder. Ends with *Begin examination* |
-| **Bedside ("base")** | Patient + bottom bar | Patient on the bed, tags: **Patient interview**, **Chart**, **Physical exam ›** |
-| **Patient interview** | `Ask_Patient_Questions` + Herbert dialogue + choice buttons | The *Herbert* folder card. Lines reveal one at a time; choices are highlightable text |
+| **Bedside ("base")** | Patient + bottom bar | Patient on the bed, tags: **Patient interview**, **Chart**, **Physical exam ›** (asks the nurse to confirm — see §4) |
+| **Patient interview** | `Ask_Patient_Questions` + Herbert dialogue + choice buttons | The *Herbert* folder card, with Herbert zoomed in (1.5×) like the Unity scene. Lines reveal one at a time; choices are highlightable text |
 | **Patient chart** | `Look_at_Chart` + each chart node | Clipboard. Rows are a vertical list; opening one writes its text on the sheet |
 | **Nurse feedback** | `Nurse_Feedback` + NurseButton | Portrait + speech bubble over everything, tap to dismiss |
 | **Physical exam** | free camera + `SymptomHitbox` colliders | Pan/zoom canvas; invisible hotspots over body parts |
@@ -135,8 +135,16 @@ abdomen→swelling, arm→scaly plaques, hand→clubbing. Hotspots are invisible
 until hovered (label + glow); examined ones get a green ring. Wheel/pinch zoom
 (1–3.5×), drag/one-finger pan, WASD/arrows, +/−. A drag never counts as a
 click. Flow: consent question → body → click part → dialogue + nurse feedback →
-back to body → **End exam** (→ `End_Exam` → debrief). **‹ Bedside** returns to
-the bedside menu without ending.
+back to body → **End exam** (→ `End_Exam` → debrief).
+
+**The physical exam is one-way.** Tapping *Physical exam ›* makes the nurse ask,
+in the same portrait + bubble as her feedback: "Going to the physical
+examination will end the patient interview and you won't be able to go back. Are
+you sure?" — *Yes, start the physical exam* / *Not yet*. The nurse overlay is
+modal (the dimmed scene is not clickable). After *Yes* there is no bedside
+menu, chart or interview any more (`engine.requestPhysical → confirmPhysical`);
+the only exits are **End exam** and, from the debrief, **Start over**.
+The zoom controls are cardboard tags to match the rest of the UI.
 
 ## 5. Art status / known gaps
 

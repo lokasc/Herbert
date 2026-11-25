@@ -172,6 +172,7 @@ export class GameEngine {
   private toasts: Toast[] = [];
   private ended = false;
   private examStarted = false;
+  private confirming = false;
 
   constructor(json: StoryJson) {
     this.mainJson = json.main;
@@ -218,6 +219,7 @@ export class GameEngine {
       visited,
       ended: this.ended,
       examStarted: this.examStarted,
+      confirmPhysical: this.confirming,
     };
   }
 
@@ -235,6 +237,7 @@ export class GameEngine {
     this.toasts = [];
     this.ended = false;
     this.examStarted = false;
+    this.confirming = false;
     this.exam = null;
     this.main = new StoryRunner(this.mainJson, (s) => this.onSwitch(s));
     this.runBeat();
@@ -334,34 +337,31 @@ export class GameEngine {
     this.emit();
   }
 
-  /** "Go to physical" button. */
-  startPhysical() {
-    if (this.phase === "exam") return;
-    this.phase = "exam";
-    if (!this.exam) {
-      this.exam = new StoryRunner(this.examJson, (s) => this.onSwitch(s));
-      this.exam.setVar("empathy", Number(this.main.getVar("empathy") ?? 0));
-      this.examStarted = false;
-      this.mode = "interview"; // consent question is a normal dialogue card
-      this.runBeat();
-    } else {
-      this.exam.setVar("empathy", Number(this.main.getVar("empathy") ?? 0));
-      this.exam.goTo("Physical_Exam");
-      this.runBeat();
-    }
-    this.examStarted = true;
+  /**
+   * "Physical exam" tag. The trip is one-way (it ends the interview), so the
+   * nurse asks first; see confirmPhysical()/cancelPhysical().
+   */
+  requestPhysical() {
+    if (this.phase !== "main" || this.mode !== "base") return;
+    this.confirming = true;
     this.emit();
   }
 
-  /** Back from the exam to the bedside menu. */
-  leaveExam() {
-    if (this.phase !== "exam") return;
-    this.syncEmpathyBack();
-    this.phase = "main";
-    this.mode = "base";
-    this.nurse = null;
-    this.lines = [];
-    this.choices = [];
+  cancelPhysical() {
+    this.confirming = false;
+    this.emit();
+  }
+
+  /** The player said yes: start the exam story. There is no way back. */
+  confirmPhysical() {
+    if (!this.confirming || this.phase !== "main") return;
+    this.confirming = false;
+    this.phase = "exam";
+    this.exam = new StoryRunner(this.examJson, (s) => this.onSwitch(s));
+    this.exam.setVar("empathy", Number(this.main.getVar("empathy") ?? 0));
+    this.mode = "interview"; // consent question is a normal dialogue card
+    this.runBeat();
+    this.examStarted = true;
     this.emit();
   }
 

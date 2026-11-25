@@ -12,6 +12,7 @@ import {
   DebugPanel,
   ExamHud,
   NurseCard,
+  NurseConfirm,
   SoundToggle,
   Toasts,
 } from "./Overlays";
@@ -79,7 +80,7 @@ function GameView({ engine }: { engine: GameEngine }) {
           ref={stageRef}
           className="stage"
           data-mode={snap.mode}
-          data-nurse={snap.nurse ? "1" : "0"}
+          data-nurse={snap.nurse || snap.confirmPhysical ? "1" : "0"}
           data-dragging={dragging ? "1" : "0"}
         >
           <div className="world" style={worldStyle}>
@@ -95,6 +96,7 @@ function GameView({ engine }: { engine: GameEngine }) {
           {snap.mode === "debrief" && <Debrief />}
 
           <NurseCard />
+          <NurseConfirm />
           <Toasts />
           <SoundToggle />
           {debug && <DebugPanel />}

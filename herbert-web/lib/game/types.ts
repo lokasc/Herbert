@@ -53,4 +53,6 @@ export interface Snapshot {
   ended: boolean;
   /** Has the player completed the consent question in the exam? */
   examStarted: boolean;
+  /** The nurse is asking "are you sure?" before the one-way trip to the exam. */
+  confirmPhysical: boolean;
 }
