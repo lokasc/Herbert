@@ -1,0 +1,29 @@
+herbert-web/app/globals.css
+  s_2be57a11513017::t_74416311be1fc1 310-312
+  h_19bb0876386cb1 120
+  s_2be57a11513017::t_2ad21af57f2b68 119
+  s_2be57a11513017::t_b36ac07bc2643a 118,121-122
+herbert-web/components/DialogueCard.tsx
+  s_2be57a11513017::t_74416311be1fc1 52-57,63-70,72-76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "79c484dd3ee3cbe61117bd18336cf78fc276e042",
+  "prompts": {},
+  "humans": {
+    "h_19bb0876386cb1": {
+      "author": "esromerog <esromerog@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_2be57a11513017": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "075ec94a-970e-43ed-80e5-b8e5db2d4a09",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "esromerog <esromerog@gmail.com>"
+    }
+  }
+}
