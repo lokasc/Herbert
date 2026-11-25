@@ -640,24 +640,34 @@ button {
 
 /* ---------- tags & bottom bar ---------- */
 
+/*
+ * The <button> is a fixed hit-box; only its inner "face" moves on hover. If the
+ * hovered element itself moved, the cursor could slip off its edge mid-
+ * transition and the button would flicker (and its label with it).
+ */
 .tag {
   position: absolute;
   z-index: 6;
   border: 0;
   background: none;
   padding: 0;
-  filter: drop-shadow(0 0.8cqw 1.2cqw rgba(60, 40, 20, 0.35));
-  transition:
-    transform 0.28s cubic-bezier(0.3, 1.5, 0.5, 1),
-    filter 0.28s;
 }
-.tag img {
+.tag__face {
+  position: relative;
+  display: block;
+  isolation: isolate;
+  filter: drop-shadow(0 0.8cqw 1.2cqw rgba(60, 40, 20, 0.35));
+  transform-origin: 50% 100%;
+  transition: transform 0.28s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.tag__face img {
   display: block;
   width: 100%;
   pointer-events: none;
 }
-.tag span {
+.tag__label {
   position: absolute;
+  z-index: 1;
   inset: 0;
   display: grid;
   place-items: center;
@@ -667,12 +677,15 @@ button {
   color: #4a3320;
   white-space: nowrap;
 }
-.tag:hover {
+.tag:hover .tag__face,
+.tag:focus-visible .tag__face {
   transform: translateY(-1.4cqw) scale(1.07) rotate(-1deg);
-  filter: drop-shadow(0 1.6cqw 2cqw rgba(60, 40, 20, 0.4));
 }
-.tag:active {
+.tag:active .tag__face {
   transform: scale(0.96);
+}
+.tag:focus-visible {
+  outline: none;
 }
 .tag--physical {
   top: 4cqw;
@@ -690,6 +703,8 @@ button {
   position: relative;
   width: 62cqw;
   font-size: 8.4cqw;
+}
+.tag--interview .tag__face {
   transform-origin: 20% 100%;
 }
 
@@ -711,11 +726,16 @@ button {
   background: none;
   border: 0;
   padding: 0;
+}
+.chartbtn__face {
+  position: relative;
+  display: block;
+  isolation: isolate;
   filter: drop-shadow(0 1cqw 1.4cqw rgba(60, 40, 20, 0.35));
   transform-origin: 80% 100%;
   transition: transform 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
 }
-.chartbtn img {
+.chartbtn__face img {
   display: block;
   width: 100%;
   pointer-events: none;
@@ -726,17 +746,23 @@ button {
   opacity: 0;
   transition: opacity 0.2s;
 }
-.chartbtn:hover {
+.chartbtn:hover .chartbtn__face,
+.chartbtn:focus-visible .chartbtn__face {
   transform: translateY(-2cqw) scale(1.14) rotate(2deg);
 }
-.chartbtn:hover .chartbtn__b {
+.chartbtn:hover .chartbtn__b,
+.chartbtn:focus-visible .chartbtn__b {
   opacity: 1;
 }
-.chartbtn:active {
+.chartbtn:active .chartbtn__face {
   transform: scale(0.96);
 }
-.chartbtn span {
+.chartbtn:focus-visible {
+  outline: none;
+}
+.chartbtn__label {
   position: absolute;
+  z-index: 1;
   left: 0;
   right: 0;
   top: 30%;
@@ -785,36 +811,100 @@ button {
   font-size: 5.6cqw;
   color: var(--you);
 }
-/* zoom controls: little cardboard tags, like the rest of the UI */
+/* zoom controls: ink-sketched outlines; hover sweeps the highlighter */
 .examhud__zoom {
   display: flex;
-  gap: 1.6cqw;
+  gap: 2.2cqw;
 }
-.examhud__zoom button {
-  min-width: 10cqw;
+.sketchbtn {
+  position: relative;
   height: 9cqw;
-  padding: 0 2.6cqw;
+  padding: 0;
   border: 0;
-  background: #c9a57a;
-  border-radius: 1.2cqw 1.8cqw 1.1cqw 1.6cqw;
+  background: none;
+  color: var(--ink);
+  transition: transform 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.sketchbtn:nth-child(odd) {
+  transform: rotate(-1.2deg);
+}
+.sketchbtn:nth-child(even) {
+  transform: rotate(0.9deg);
+}
+.sketchbtn:hover,
+.sketchbtn:focus-visible {
+  transform: translateY(-0.5cqw) rotate(-1.5deg) scale(1.05);
+  outline: none;
+}
+.sketchbtn:active {
+  transform: scale(0.94);
+}
+.sketchbtn__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.sketchbtn__frame path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sketchbtn__frame .sketchbtn__ghost {
+  stroke-width: 1.6;
+  opacity: 0.4;
+}
+.sketchbtn__hl {
+  position: absolute;
+  inset: 1cqw 0.8cqw;
+  border-radius: 1.6cqw;
+  background-image: linear-gradient(
+    102deg,
+    transparent 0.6%,
+    var(--marker) 3%,
+    var(--marker) 95%,
+    transparent 99%
+  );
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  transition: background-size 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.sketchbtn:hover .sketchbtn__hl,
+.sketchbtn:focus-visible .sketchbtn__hl {
+  background-size: 100% 100%;
+}
+.sketchbtn:active .sketchbtn__hl {
+  background-image: linear-gradient(
+    102deg,
+    transparent 0.6%,
+    var(--marker-strong) 3%,
+    var(--marker-strong) 95%,
+    transparent 99%
+  );
+}
+.sketchbtn__label {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
   font-family: var(--font-hand), cursive;
   font-weight: 700;
   font-size: 6cqw;
   line-height: 1;
-  color: #4a3320;
-  box-shadow:
-    inset 0 0 0 0.4cqw rgba(140, 96, 60, 0.35),
-    0 0.7cqw 1.1cqw rgba(60, 40, 20, 0.3);
-  transition:
-    transform 0.25s cubic-bezier(0.3, 1.5, 0.5, 1),
-    background 0.2s;
 }
-.examhud__zoom button:hover {
-  background: #d8b98f;
-  transform: translateY(-0.7cqw) rotate(-1.5deg) scale(1.06);
+.sketchbtn__glyph {
+  width: 6.4cqw;
+  height: 6.4cqw;
 }
-.examhud__zoom button:active {
-  transform: scale(0.94);
+.sketchbtn__glyph path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
 }
 
 /* nurse "are you sure?" */
@@ -842,16 +932,38 @@ button {
   right: 3cqw;
   width: 9.5cqw;
   height: 9.5cqw;
+  padding: 0;
+  display: grid;
+  place-items: center;
   border-radius: 50%;
   border: 0.4cqw solid var(--paper-edge);
   background: var(--paper);
-  font-size: 5cqw;
-  line-height: 1;
+  color: var(--ink);
   box-shadow: 0 0.6cqw 1.6cqw rgba(0, 0, 0, 0.2);
   transition: transform 0.2s;
 }
 .soundbtn:hover {
   transform: scale(1.1);
+}
+.soundbtn svg {
+  display: block;
+  width: 62%;
+  height: 62%;
+  overflow: visible;
+}
+.soundbtn svg * {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.soundbtn .soundbtn__head {
+  fill: currentColor;
+}
+.soundbtn .soundbtn__slash {
+  stroke: var(--herbert);
+  stroke-width: 2.1;
 }
 
 .debug {

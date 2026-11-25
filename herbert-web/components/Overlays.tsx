@@ -93,21 +93,98 @@ export function BottomBar() {
   return (
     <>
       <button type="button" className="tag tag--physical" onClick={() => engine.requestPhysical()}>
-        <img src="/assets/ui/tag.webp" alt="" draggable={false} />
-        <span>Physical exam ›</span>
+        <span className="tag__face">
+          <img src="/assets/ui/tag.webp" alt="" draggable={false} />
+          <span className="tag__label">Physical exam ›</span>
+        </span>
       </button>
       <div className="bottombar">
         <button type="button" className="tag tag--interview" onClick={() => engine.openInterview()}>
-          <img src="/assets/ui/tag.webp" alt="" draggable={false} />
-          <span>Patient interview</span>
+          <span className="tag__face">
+            <img src="/assets/ui/tag.webp" alt="" draggable={false} />
+            <span className="tag__label">Patient interview</span>
+          </span>
         </button>
         <button type="button" className="chartbtn" onClick={() => engine.openChart()} aria-label="Patient chart">
-          <img className="chartbtn__a" src="/assets/ui/chart-btn.png" alt="" draggable={false} />
-          <img className="chartbtn__b" src="/assets/ui/chart-btn-hover.png" alt="" draggable={false} />
-          <span>Chart</span>
+          <span className="chartbtn__face">
+            <img className="chartbtn__a" src="/assets/ui/chart-btn.png" alt="" draggable={false} />
+            <img className="chartbtn__b" src="/assets/ui/chart-btn-hover.png" alt="" draggable={false} />
+            <span className="chartbtn__label">Chart</span>
+          </span>
         </button>
       </div>
     </>
+  );
+}
+
+/** Tiny seeded PRNG so each sketched frame is hand-wobbly but stable across renders. */
+function wobble(seed: number) {
+  let t = seed * 2654435761;
+  return () => {
+    t = (t + 0x6d2b79f5) | 0;
+    let x = Math.imul(t ^ (t >>> 15), 1 | t);
+    x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** One pen pass around a rounded box: slightly off corners, a little overshoot where the pen lifts. */
+function sketchPath(w: number, h: number, seed: number) {
+  const r = wobble(seed);
+  const j = (n = 2.4) => (r() - 0.5) * 2 * n;
+  const m = 2.2; // margin inside the viewBox
+  const c = 9; // corner radius
+  const x0 = m + j(), y0 = m + j(), x1 = w - m + j(), y1 = h - m + j();
+  const start = [x0 + c + j(3.4), y0 + j(1.6)];
+  return [
+    `M${start[0]} ${start[1]}`,
+    `Q${(x0 + x1) / 2} ${y0 + j(3.2)} ${x1 - c} ${y0 + j()}`,
+    `Q${x1 + j(2)} ${y0 + j()} ${x1 + j(1.6)} ${y0 + c}`,
+    `Q${x1 + j(3.2)} ${(y0 + y1) / 2} ${x1 + j(1.6)} ${y1 - c}`,
+    `Q${x1 + j()} ${y1 + j()} ${x1 - c} ${y1 + j(1.6)}`,
+    `Q${(x0 + x1) / 2} ${y1 + j(3.2)} ${x0 + c} ${y1 + j()}`,
+    `Q${x0 + j()} ${y1 + j()} ${x0 + j(1.6)} ${y1 - c}`,
+    `Q${x0 + j(3.2)} ${(y0 + y1) / 2} ${x0 + j(1.6)} ${y0 + c + 2}`,
+    // overshoot: the pen doesn't quite close the loop
+    `Q${x0 + j()} ${y0 + j()} ${start[0] + 5} ${start[1] + j(2.6)}`,
+  ].join(" ");
+}
+
+/**
+ * Ink-outline button: transparent, with a hand-drawn double-stroke frame.
+ * Hover sweeps the same highlighter stroke the dialogue text uses.
+ * `w` is the width in cqw; the frame is drawn in 0.1cqw units so it never distorts.
+ */
+function SketchButton({
+  w,
+  seed,
+  onClick,
+  label,
+  children,
+}: {
+  w: number;
+  seed: number;
+  onClick: () => void;
+  label: string;
+  children: React.ReactNode;
+}) {
+  const W = w * 10;
+  const H = 90;
+  return (
+    <button
+      type="button"
+      className="sketchbtn"
+      style={{ width: `${w}cqw` }}
+      onClick={onClick}
+      aria-label={label}
+    >
+      <span className="sketchbtn__hl" aria-hidden />
+      <svg className="sketchbtn__frame" viewBox={`0 0 ${W} ${H}`} aria-hidden>
+        <path d={sketchPath(W, H, seed)} />
+        <path d={sketchPath(W, H, seed + 40)} className="sketchbtn__ghost" />
+      </svg>
+      <span className="sketchbtn__label">{children}</span>
+    </button>
   );
 }
 
@@ -126,8 +203,10 @@ export function ExamHud({
   return (
     <>
       <button type="button" className="tag tag--end" onClick={() => engine.endExam()}>
-        <img src="/assets/ui/tag.webp" alt="" draggable={false} />
-        <span>End exam</span>
+        <span className="tag__face">
+          <img src="/assets/ui/tag.webp" alt="" draggable={false} />
+          <span className="tag__label">End exam</span>
+        </span>
       </button>
       <div className="examhud">
         <p className="examhud__hint">
@@ -139,9 +218,20 @@ export function ExamHud({
             {found} / {HOTSPOTS.length} examined
           </span>
           <span className="examhud__zoom" role="group" aria-label="Zoom">
-            <button type="button" onClick={() => onZoom(0.8)} aria-label="Zoom out">−</button>
-            <button type="button" onClick={onReset} aria-label="Reset zoom">{Math.round(zoom * 100)}%</button>
-            <button type="button" onClick={() => onZoom(1.25)} aria-label="Zoom in">+</button>
+            <SketchButton w={11} seed={3} onClick={() => onZoom(0.8)} label="Zoom out">
+              <svg className="sketchbtn__glyph" viewBox="0 0 24 24" aria-hidden>
+                <path d="M5.2 12.3 C9 11.6 14.5 12.5 18.8 11.8" />
+              </svg>
+            </SketchButton>
+            <SketchButton w={17} seed={11} onClick={onReset} label="Reset zoom">
+              {Math.round(zoom * 100)}%
+            </SketchButton>
+            <SketchButton w={11} seed={7} onClick={() => onZoom(1.25)} label="Zoom in">
+              <svg className="sketchbtn__glyph" viewBox="0 0 24 24" aria-hidden>
+                <path d="M5.2 12.3 C9 11.6 14.5 12.5 18.8 11.8" />
+                <path d="M12.2 5.1 C11.6 9 12.5 14.6 11.9 18.9" />
+              </svg>
+            </SketchButton>
           </span>
         </div>
       </div>
@@ -215,7 +305,12 @@ export function SoundToggle() {
     <>
       <audio ref={ref} src="/assets/audio/heart-song.mp3" loop preload="none" />
       <button type="button" className="soundbtn" onClick={toggle} aria-label={muted ? "Play music" : "Mute music"}>
-        {muted ? "♪̸" : "♪"}
+        <svg viewBox="0 0 24 24" aria-hidden>
+          <path className="soundbtn__note" d="M9.5 17.6V5.4l8.4-1.9v11.4" />
+          <ellipse className="soundbtn__head" cx="7.3" cy="17.8" rx="2.9" ry="2.3" />
+          <ellipse className="soundbtn__head" cx="15.7" cy="15.4" rx="2.9" ry="2.3" />
+          {muted && <path className="soundbtn__slash" d="M4.2 4.6 C9 9.5 15.5 16 19.8 20.2" />}
+        </svg>
       </button>
     </>
   );
