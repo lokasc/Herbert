@@ -115,6 +115,11 @@ button {
   transform: translate(-29cqw, -7cqh) scale(1.5);
 }
 
+/* Bedside menu: tighter on Herbert (head + torso), matching the Unity scene. */
+.stage[data-mode="base"] .world {
+  transform: translate(-41cqw, -5.9cqh) scale(1.6);
+}
+
 .room {
   position: absolute;
   inset: 0;
@@ -301,6 +306,9 @@ button {
   border-image-slice: 410 70 100 60 fill;
   border-image-width: 39.4cqw 6.7cqw 9.6cqw 5.8cqw;
   filter: drop-shadow(0 -1cqw 3cqw rgba(60, 45, 25, 0.28));
+}
+.card--tappable {
+  cursor: pointer;
 }
 .card--folder .card__scroll {
   padding: 19cqw 11cqw 9cqw 8.5cqw;

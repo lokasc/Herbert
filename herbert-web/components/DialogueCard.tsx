@@ -49,13 +49,31 @@ export function DialogueCard() {
     return () => setSpeaking(false);
   }, [line?.speaker, done, snap.nurse, setSpeaking]);
 
+  // A lone "Continue" choice is just a way forward, not a decision.
+  const onlyContinue =
+    showChoices && snap.choices.length === 1 && choiceKind(snap.choices[0]) === "continue";
+  // The whole card is the tap target when there is nothing to pick between.
+  const tappable = !done || canAdvance || onlyContinue;
+
   const onTextClick = () => {
     if (!done) skip();
     else if (!isLast) engine.advanceLine();
   };
 
+  const onCardClick = (e: React.MouseEvent) => {
+    if (!tappable) return;
+    // Buttons (the line itself, choices) handle their own clicks.
+    if ((e.target as HTMLElement).closest("button")) return;
+    if (onlyContinue) engine.choose(snap.choices[0].index);
+    else onTextClick();
+  };
+
   return (
-    <section className="card card--folder" aria-live="polite">
+    <section
+      className={`card card--folder ${tappable ? "card--tappable" : ""}`}
+      aria-live="polite"
+      onClick={onCardClick}
+    >
       <div className="card__scroll">
         {line && (
           <button
