@@ -289,7 +289,17 @@ button {
   bottom: 1cqw;
   min-height: 74cqw;
   max-height: 80cqh;
-  background: url("/assets/ui/folder.webp") 0 0 / 100% 100% no-repeat;
+  /*
+   * 9-slice: folder.webp is 1000x1301 and the card is ~96cqw wide, so 1px of art
+   * = 0.096cqw. The top slice (410px) holds the clip, the "Herbert" label and the
+   * side tab; they keep their proportions while only the plain paper in the
+   * middle band stretches with the card's height.
+   */
+  border: solid transparent;
+  border-width: 0;
+  border-image-source: url("/assets/ui/folder.webp");
+  border-image-slice: 410 70 100 60 fill;
+  border-image-width: 39.4cqw 6.7cqw 9.6cqw 5.8cqw;
   filter: drop-shadow(0 -1cqw 3cqw rgba(60, 45, 25, 0.28));
 }
 .card--folder .card__scroll {
