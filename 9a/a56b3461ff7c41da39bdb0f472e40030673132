@@ -1,0 +1,116 @@
+herbert-web/hooks/useTypewriter.ts
+  s_dfaf9890843e7a::t_f142b7fc70a1ad 1-22,27-48
+  s_dfaf9890843e7a::t_79f5677ad87f8f 23-26
+herbert-web/components/Marker.tsx
+  s_dfaf9890843e7a::t_f06ee397f1ccc2 1-50
+herbert-web/app/page.tsx
+  s_dfaf9890843e7a::t_81357b367fdd11 1-4
+  s_dfaf9890843e7a::t_762439eaa9378e 5
+herbert-web/package.json
+  s_dfaf9890843e7a::t_a2a7fc92f44caa 9-13
+  s_dfaf9890843e7a::t_766e73a4528fa5 16
+  s_dfaf9890843e7a::t_13ce6ed96ddc75 1-8,14-15,17-31
+herbert-web/lib/game/content.ts
+  s_dfaf9890843e7a::t_8fc8b117799c52 1-31,34-35,42-46
+  s_dfaf9890843e7a::t_97a48540f85234 39
+  s_dfaf9890843e7a::t_65646f1f69faa7 32-33
+  s_dfaf9890843e7a::t_767cbf90add144 36-38,40-41
+herbert-web/scripts/build-ink.mjs
+  s_dfaf9890843e7a::t_aa8bfe4d84db3b 19
+  s_dfaf9890843e7a::t_5ea36115d03b7f 1-18,20-40
+herbert-web/components/Game.tsx
+  s_dfaf9890843e7a::t_8a055cb8df4ff6 52-53
+  s_dfaf9890843e7a::t_f1aaa4a99f80b8 77
+  s_dfaf9890843e7a::t_81357b367fdd11 1-51,54-76,78-105
+herbert-web/components/Patient.tsx
+  s_dfaf9890843e7a::t_767cbf90add144 6,55-61,63-67,69-75,77-78
+  s_dfaf9890843e7a::t_1d4d468ccb9d65 1-5,7-54,62,68,76,79-82,84-109
+  s_dfaf9890843e7a::t_6feab40e0e737b 83
+herbert-web/app/globals.css
+  s_dfaf9890843e7a::t_895bd7d2fe859c 3-103,108-114,116-127,132-135,137-144,146-149,152-154,156-302,304-307,309-422,424-426,429-441,443-555,557-741,743-745,747,750-808,810-937
+  s_dfaf9890843e7a::t_9056ff774cbc6f 104-107
+  s_dfaf9890843e7a::t_25e5dda355bf03 809
+  s_dfaf9890843e7a::t_493f6c09380f02 303,308,423,427-428,442
+  s_dfaf9890843e7a::t_ae4573dbde72da 556
+  s_dfaf9890843e7a::t_767cbf90add144 115,131,136,145,151,155
+  s_dfaf9890843e7a::t_1ef6e83c24fc88 128-130
+  s_dfaf9890843e7a::t_6feab40e0e737b 150,742,746,748-749
+  s_dfaf9890843e7a::t_de05de963ea9ff 1-2
+herbert-web/eslint.config.mjs
+  s_dfaf9890843e7a::t_458cb88d8062f2 8-11
+  s_dfaf9890843e7a::t_d95c68795ae796 1-7,12-22
+herbert-web/lib/game/types.ts
+  s_dfaf9890843e7a::t_1479c4d217fb8a 1-56
+herbert-web/scripts/herbert-rig/export.py
+  s_dfaf9890843e7a::t_7a2415a5f2a4a7 1-129
+herbert-web/components/DialogueCard.tsx
+  s_dfaf9890843e7a::t_a7d14cc988a768 1-84
+herbert-web/scripts/herbert-rig/rig.py
+  s_dfaf9890843e7a::t_7a2415a5f2a4a7 1-49
+herbert-web/lib/game/engine.ts
+  s_dfaf9890843e7a::t_85e19e64be9f3d 100
+  s_dfaf9890843e7a::t_1cb0bac1ce81b4 373-374
+  s_dfaf9890843e7a::t_7006283953a0a7 267-271
+  s_dfaf9890843e7a::t_c06c00704bbbe4 88-94
+  s_dfaf9890843e7a::t_c00ccf76d99d4e 1-87,95-99,101-266,272-372,375-391
+herbert-web/components/GameContext.tsx
+  s_dfaf9890843e7a::t_84faad21e7b327 1-21
+herbert-web/docs/DESIGN.md
+  s_dfaf9890843e7a::t_eff081c086d720 161-162
+  s_dfaf9890843e7a::t_97a48540f85234 143-152
+  s_dfaf9890843e7a::t_75850ee5af7009 1-142,153-160,163-182
+herbert-web/README.md
+  s_dfaf9890843e7a::t_75850ee5af7009 1-14
+herbert-web/app/layout.tsx
+  s_dfaf9890843e7a::t_81357b367fdd11 1-31
+  s_dfaf9890843e7a::t_11562477660917 32-34
+herbert-web/components/ChartSheet.tsx
+  s_dfaf9890843e7a::t_b230e4aaa04165 1-84
+herbert-web/.gitignore
+  s_dfaf9890843e7a::t_a2a7fc92f44caa 42-45
+  s_dfaf9890843e7a::t_74dfd69de5279a 1-41
+herbert-web/components/Overlays.tsx
+  s_dfaf9890843e7a::t_dbe5ae5b2e9271 1-162,164-219
+  s_dfaf9890843e7a::t_81357b367fdd11 163
+herbert-web/hooks/usePanZoom.ts
+  s_dfaf9890843e7a::t_e279c207e4a425 1-162,164-180
+  s_dfaf9890843e7a::t_79f5677ad87f8f 163
+herbert-web/ink/ChartAndInterview.ink
+  s_dfaf9890843e7a::t_ff5c5dd8e92c18 1-738
+herbert-web/ink/PhysicalExam.ink
+  s_dfaf9890843e7a::t_97fde2f0ca10fe 1-210
+herbert-web/lib/game/rig.generated.ts
+  s_dfaf9890843e7a::t_e381fa1a8fb7db 1-41
+herbert-web/package-lock.json
+  s_dfaf9890843e7a::t_bf66cef6d3ba2f 1-6802
+herbert-web/scripts/sync-ink-from-unity.mjs
+  s_dfaf9890843e7a::t_d9e32e103db681 1-15
+Assets/Scenes/HebertVisualNovel.unity
+  s_53171e2f96aa60::t_0722fd405b9ad0 158,181,606,1682,1705,2514,3113
+herbert-web/AGENTS.md
+  s_dfaf9890843e7a::t_a433c264dcd709 1-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "9aa56b3461ff7c41da39bdb0f472e40030673132",
+  "prompts": {},
+  "sessions": {
+    "s_53171e2f96aa60": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b14b09c9-a0d9-4197-9e6d-f86fbdfd379b",
+        "model": "unknown"
+      },
+      "human_author": "esromerog <esromerog@gmail.com>"
+    },
+    "s_dfaf9890843e7a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84ad9aa7-49bf-4319-a503-8f59987526e7",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "esromerog <esromerog@gmail.com>"
+    }
+  }
+}
