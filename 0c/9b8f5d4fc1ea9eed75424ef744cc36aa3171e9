@@ -1,0 +1,21 @@
+herbert-web/lib/game/engine.ts
+  s_55e0143c9aca2d::t_5fed06b5b7f25c 216-292
+  s_55e0143c9aca2d::t_8c72a51661d737 152-187
+  s_55e0143c9aca2d::t_0f1eaebaa48df2 304
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "0c9b8f5d4fc1ea9eed75424ef744cc36aa3171e9",
+  "prompts": {},
+  "sessions": {
+    "s_55e0143c9aca2d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "93129294-abe8-47a4-9311-8ad2253dd6f9",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "esromerog <esromerog@gmail.com>"
+    }
+  }
+}
