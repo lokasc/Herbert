@@ -1,0 +1,36 @@
+herbert-web/components/Overlays.tsx
+  s_dfaf9890843e7a::t_b2b7f9353701a6 33-63,95,141
+  h_19bb0876386cb1 134-135
+herbert-web/app/globals.css
+  s_dfaf9890843e7a::t_b2b7f9353701a6 115,685,760-762,788,791,794-802,804-810,813-833
+  s_dfaf9890843e7a::t_af906e15695c16 93
+herbert-web/docs/DESIGN.md
+  s_dfaf9890843e7a::t_0fe21c6749bfbb 17-18,138-147
+herbert-web/lib/game/engine.ts
+  s_dfaf9890843e7a::t_fa383bab0231aa 175,222,240,340-346,350-364
+herbert-web/lib/game/types.ts
+  s_dfaf9890843e7a::t_fa383bab0231aa 56-57
+herbert-web/components/Game.tsx
+  s_dfaf9890843e7a::t_b2b7f9353701a6 15,83,99
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "3809064be881314882cfb76b7531715eb636123a",
+  "prompts": {},
+  "humans": {
+    "h_19bb0876386cb1": {
+      "author": "esromerog <esromerog@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_dfaf9890843e7a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "84ad9aa7-49bf-4319-a503-8f59987526e7",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "esromerog <esromerog@gmail.com>"
+    }
+  }
+}
