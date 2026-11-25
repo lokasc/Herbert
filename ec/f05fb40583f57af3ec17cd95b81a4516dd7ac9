@@ -1,0 +1,19 @@
+herbert-web/app/globals.css
+  s_edefeb03ceacb3::t_a29c730874852d 292-302
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "ecf05fb40583f57af3ec17cd95b81a4516dd7ac9",
+  "prompts": {},
+  "sessions": {
+    "s_edefeb03ceacb3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0db34149-f5e0-4292-bcd7-f6655664405a",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "esromerog <esromerog@gmail.com>"
+    }
+  }
+}
