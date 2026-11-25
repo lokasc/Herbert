@@ -1,0 +1,28 @@
+herbert-web/components/Overlays.tsx
+  s_360c712af9eec6::t_de617ebef12e26 6,202,218,250
+herbert-web/lib/game/engine.ts
+  s_360c712af9eec6::t_9ac4f5b947a6c5 26
+  s_360c712af9eec6::t_63961ee52cdbb3 2,22-25,28-40,69,135,394-397
+  s_360c712af9eec6::t_de617ebef12e26 170
+  s_360c712af9eec6::t_250d499ad0b2af 27
+herbert-web/lib/game/content.ts
+  s_360c712af9eec6::t_63961ee52cdbb3 53
+  s_360c712af9eec6::t_de617ebef12e26 42-44,47-50
+  s_360c712af9eec6::t_a8f3b9f25bab4c 51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "576621e5940aa725e4670d7494db3ea9fb528fc5",
+  "prompts": {},
+  "sessions": {
+    "s_360c712af9eec6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "82f1049e-82b1-4dd4-9a6f-76803ee1aaf1",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "esromerog <esromerog@gmail.com>"
+    }
+  }
+}
