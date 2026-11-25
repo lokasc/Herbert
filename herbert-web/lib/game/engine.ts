@@ -149,6 +149,42 @@ const TRACKED_KNOTS = [
   "BibasilarCrackles_Question",
 ];
 
+/** localStorage key + format version for the saved game. Bump SAVE_VERSION when the shape below changes. */
+const SAVE_KEY = "herbert-save";
+const SAVE_VERSION = 1;
+
+/**
+ * Everything needed to put the player back exactly where they were: the two
+ * ink states (variables, visit counts, story position — this is where
+ * empathy and every "inspected" flag live) plus what is on screen.
+ * `sig` fingerprints the compiled ink so a save from an older story is dropped
+ * instead of loaded into a story it no longer matches.
+ */
+interface SaveData {
+  v: number;
+  sig: string;
+  main: string;
+  exam: string | null;
+  mode: Mode;
+  phase: Phase;
+  lines: Line[];
+  cursor: number;
+  choices: Choice[];
+  nurse: Line | null;
+  ended: boolean;
+  examStarted: boolean;
+  confirming: boolean;
+  lineCounter: number;
+  beatCounter: number;
+}
+
+/** Small non-crypto hash (djb2) — only used to notice that the ink changed. */
+function fingerprint(text: string): string {
+  let h = 5381;
+  for (let i = 0; i < text.length; i++) h = ((h << 5) + h + text.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
+
 export class GameEngine {
   private main!: StoryRunner;
   private exam: StoryRunner | null = null;
@@ -177,7 +213,83 @@ export class GameEngine {
   constructor(json: StoryJson) {
     this.mainJson = json.main;
     this.examJson = json.exam;
-    this.reset();
+    if (!this.restore()) this.reset();
+  }
+
+  // ---------- persistence ----------
+  private get signature() {
+    return fingerprint(this.mainJson + this.examJson);
+  }
+
+  /** Write the current game to localStorage. Never throws (private mode / quota). */
+  private save() {
+    try {
+      const data: SaveData = {
+        v: SAVE_VERSION,
+        sig: this.signature,
+        main: this.main.story.state.toJson(),
+        exam: this.exam ? this.exam.story.state.toJson() : null,
+        mode: this.mode,
+        phase: this.phase,
+        lines: this.lines,
+        cursor: this.cursor,
+        choices: this.choices,
+        nurse: this.nurse,
+        ended: this.ended,
+        examStarted: this.examStarted,
+        confirming: this.confirming,
+        lineCounter: this.lineCounter,
+        beatCounter: this.beatCounter,
+      };
+      localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    } catch {
+      // Saving is best-effort; the game keeps working without it.
+    }
+  }
+
+  /** Load a saved game. Returns false (and discards the save) if there is none or it is unusable. */
+  private restore(): boolean {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) return false;
+      const data = JSON.parse(raw) as SaveData;
+      if (data.v !== SAVE_VERSION || data.sig !== this.signature) {
+        localStorage.removeItem(SAVE_KEY);
+        return false;
+      }
+
+      // Build everything locally first so a bad save can't leave us half-restored.
+      const main = new StoryRunner(this.mainJson, (s) => this.onSwitch(s));
+      main.story.state.LoadJson(data.main);
+      let exam: StoryRunner | null = null;
+      if (data.exam) {
+        exam = new StoryRunner(this.examJson, (s) => this.onSwitch(s));
+        exam.story.state.LoadJson(data.exam);
+      }
+
+      this.main = main;
+      this.exam = exam;
+      this.mode = data.mode;
+      this.phase = data.phase;
+      this.lines = data.lines;
+      this.cursor = data.cursor;
+      this.choices = data.choices;
+      this.nurse = data.nurse;
+      this.ended = data.ended;
+      this.examStarted = data.examStarted;
+      this.confirming = data.confirming;
+      this.lineCounter = data.lineCounter;
+      this.beatCounter = data.beatCounter;
+      this.pendingMode = null;
+      this.toasts = [];
+      this.emit();
+      return true;
+    } catch {
+      try {
+        localStorage.removeItem(SAVE_KEY);
+      } catch {}
+      return false;
+    }
   }
 
   // ---------- external store plumbing ----------
@@ -189,6 +301,7 @@ export class GameEngine {
 
   private emit() {
     this.snap = this.buildSnapshot();
+    this.save();
     this.listeners.forEach((l) => l());
   }
 
